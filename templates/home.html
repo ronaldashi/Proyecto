@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>UPTC</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
+
+<body onload="/home/">
+	<h1>Solicitud de Admision UPTC</h1>
+
+	<script>
+		let validar= () => {
+				          
+				
+				var todo_correcto = true;		
+				
+				if(document.getElementById('Tfijo').value.length < 2 ){
+				    todo_correcto = false;
+				}
+			
+			var corr = /^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$/;
+		    if(!corr.test(document.getElementById('Tcorreo').value)){
+				    todo_correcto = false;
+				}
+		
+		    if(document.getElementById('Tnombres').value.length < 2 ){
+				    todo_correcto = false;
+				}
+		
+		    if(document.getElementById('Tapellidos').value.length < 2 ){
+				    todo_correcto = false;
+				}
+			var date = /^([12]\d{3})\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/;
+		    if(!date.test(document.getElementById('Tfecha').value)){
+				    todo_correcto = false;
+				}
+		
+		    if(document.getElementById('Tcelular').value.length < 10 ){
+				    todo_correcto = false;
+				}
+			var dir = /(^[a-zA-Z]+\s\d+\s#\s?[0-9]+\-[0-9]+$)|(^[a-zA-Z]+[0-9]#[0-9]\-[0-9]\s?[a-zA-Z]\s?[a-zA-Z]*$)|(^[a-zA-Z 0-9]+$)/;
+		    if(!dir.test(document.getElementById('Tdireccion').value)){
+				    todo_correcto = false;
+				}
+		
+		    if(document.getElementById('Tcodigo').value.length < 2 ){
+				    todo_correcto = false;
+				}
+				
+				if(!todo_correcto){
+				alert('Algunos campos no están correctos, vuelva a revisarlos');
+				}
+		    else{ 	
+				document.formulario.target = "_self";
+				document.formulario.id.value="crearArchivo";
+				document.formulario.action = "/crearArchivo/";
+				document.formulario.submit();
+				
+				alert("Direccion agregada con exito")
+
+				validar2()
+
+
+				
+		    }
+		        				
+				return todo_correcto;
+				}
+		
+		    let validar2= () => {
+
+				document.formulario.target = "_blank";
+				document.formulario.id.value=" ";
+				document.formulario.action = " ";
+				document.formulario.submit();
+		
+			}
+		
+	</script>
+
+
+	<form action="/leerArchivo/" method="POST" name="formulario" enctype="multipart/form-data">
+		{% csrf_token %}
+
+		
+
+		<div>
+			<label for="correo" id="correo">Correo</label>
+			<input type="text" id="Tcorreo" class="{%if emailValue == None %}{%elif email %}correcto{% else %}incorrecto{% endif %}" name="email" placeholder="ejemplo123@gmail.com" value="{% if email %}{{emailValue}}{% endif %}" />
+		</div>
+		<div>
+			<label for="nombres" id="nombres">Nombres</label>
+			<input type="text" id="Tnombres" class="{%if nombreValue == None %}{%elif nombre %}correcto{% else %}incorrecto{% endif %}" name="nombre" placeholder="Ingrese los nombres" value="{% if nombre %}{{nombreValue}}{% endif %}" />
+			<!-- {{ nombre }} -->
+		</div>
+		<div>
+			<label for="apellidos" id="apellidos">Apellidos</label>
+			<input type="text" id="Tapellidos" class="{%if apellidoValue == None %}{%elif apellido %}correcto{% else %}incorrecto{% endif %}" name="apellidos" placeholder="Ingrese los apellidos" value="{% if apellido %}{{apellidoValue}}{% endif %}" />
+			<!-- {{ apellido }} -->
+		</div>
+		<div>
+			<label for="fechaNacimiento" id="fechaNacimiento">Fecha de nacimiento</label>
+			<input type="text" id="Tfecha" class="{%if fechaNacimientoValue == None %}{%elif fechaNacimiento %}correcto{% else %}incorrecto{% endif %}" name="fechaNacimiento" placeholder="yyyy/mm/dd" value="{% if fechaNacimiento %}{{fechaNacimientoValue}}{% endif %}" />
+			<!-- {{ fechaNacimiento }} -->
+		</div>
+		<div>
+			<label for="celular" id="celular">Número Celular</label>
+			<input type="text" id="Tcelular" class="{%if celularValue == None %}{%elif celular %}correcto{% else %}incorrecto{% endif %}" name="celular" placeholder="3211243243" value="{% if celular %}{{celularValue}}{% endif %}" />
+			<!-- {{ celular }} -->
+		</div>
+		<div>
+			<label for="fijo" id="fijo">Telefono Fijo</label>
+			<input class="{%if fijoValue == None %}{%elif fijo %}correcto{% else %}incorrecto{% endif %}" value="{% if fijo %}{{fijoValue}}{% endif %}" type="text" name="telefonoFijo" placeholder="7645034" id="Tfijo" />
+			<!-- {{ fijo }} -->
+		</div>
+		<div>
+			<label for="dirección" id="direccion">Dirección</label>
+			<input id="Tdireccion" class="{%if direccionValue == None %}{%elif direccion %}correcto{% else %}incorrecto{% endif %}" value="{% if direccion %}{{direccionValue}}{% endif %}" type="text" placeholder="Carrera 12 # 3 - 12" name="direccion" />
+		</div>
+
+
+		<div>
+			<label for="codigoPostal" id="codigoPostal">Código Postal</label>
+			<input id="Tcodigo" class="{%if zipValue == None %}{%elif zip %}correcto{% else %}incorrecto{% endif %}" value="{% if zip %}{{zipValue}}{% endif %}" type="text" placeholder="123456" name="zip" />
+			<!-- {{ direccion }} -->
+		</div>
+		<br>
+		<br>
+		<p></p>
+		<div>
+			<br>
+			<button type="submit" onclick="validar()">Enviar</button>
+		</div>
+	</form>
+	
+
+	<style type="text/css">
+		:root {
+				        --primary-color: #bbbbbb;
+				        --secondary-color: #071f3f;
+				        --success-color: 88, 196, 114;
+				        --error-color: 242, 62, 92;
+				        --medium-color: #2c639b;
+				        --size-font: 1.2rem;
+				      }
+				
+				      html {
+				        min-height: 100vh;
+				        margin: 0;
+				        padding: 0;
+				      }
+				      body {
+				        font-size: var(--size-font);
+				        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+				          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+				        padding: 2% 15% 0;
+				        background: var(--primary-color);
+				        color: var(--secondary-color);
+				        font-weight: 200;
+				      }
+				
+				      .correcto {
+				        border: 1px solid rgba(var(--success-color), 1);
+				        background: rgba(var(--success-color), 0.2);
+				        
+				      }
+				
+				      .incorrecto {
+				        border: 1px solid rgba(var(--error-color), 1);
+				        background: rgba(var(--error-color), 0.2);
+				      }
+				
+				      h1 {
+				        text-align: center;
+				      }
+				
+				      form {
+				        display: grid;
+				        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+				        gap: 10px;
+				      }
+				
+				      input {
+				        padding: 2% 4%;
+				        color: var(--font-color);
+				        font-size: var(--size-font);
+				        background: var(--medium-color);
+				        outline: none;
+				        border: 1px solid var(--primary-color);
+				        border-radius: 5px;
+				      }
+				
+				      button {
+				        padding: 2% 4%;
+				        color: var(--font-color);
+				        font-size: var(--size-font);
+				        background: var(--medium-color);
+				        outline: none;
+				        border: 1px solid var(--primary-color);
+				        border-radius: 5px;
+						
+				      }
+				      button:hover {
+				        background: #ffffff;
+				        cursor: pointer;
+				      }
+				
+				      form > div {
+				        display: grid;
+				        grid-template-columns: auto;
+				        row-gap: 16px;
+				      }
+
+					  #boton {
+
+						display: none;
+					  }
+				
+		
+	</style>
+</body>
+</html>
